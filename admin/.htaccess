@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Admin Panel"
+AuthUserFile C:/OpenServer/domains/blog/admin/.htpasswd
+Require valid-user

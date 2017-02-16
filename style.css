@@ -1,0 +1,71 @@
+*{
+     margin: 0;
+}
+
+h1{
+    color: brown;   
+}
+a:active{
+    color: brown;    
+}
+em{
+    color: dimgrey;  
+}
+.container{
+   
+}
+footer{     
+  text-align: center;
+}
+textarea{
+    width: 100%;
+    height: 300px;
+}
+.regstr{
+    margin-left: 50px; 
+    margin-top: 20px;
+}
+.please{
+    color:#5CA1D5;
+    font-size: 30px;
+}
+
+.pagination{
+    margin: 0 auto;
+}
+li{
+    
+}
+.titles{
+     color:#A1BED0;
+}
+
+.blog{
+     color: #5CA1D5;
+     font-size: 50px;
+}
+.links{
+    color: dimgrey;  
+    text-decoration: underline;
+}
+.edit{
+    color:#A1BED0;
+    text-decoration: underline;
+}
+
+.admin-table{
+     width: 100%;   
+}
+
+#logout{
+    margin-left: 5%;
+}
+#welcome{
+    margin-left: 5%;
+}
+#register{
+    margin-left: 5%;
+}
+#login{
+    margin-left: 5%;
+}
