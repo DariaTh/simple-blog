@@ -1,44 +1,60 @@
 <?php
 
 function articles_all($link){
+   $query = "SELECT * FROM articles ORDER BY id DESC";
 
-    $stmt = $link->prepare("SELECT * FROM articles ORDER BY id DESC");
-    if ($stmt->execute()){
-        return $stmt->fetchAll();
+   $result = mysqli_query($link, $query);
+
+    if (!$result)
+        die(mysqli_error($link));
+
+    // from DB:
+    $n = mysqli_num_rows($result);
+    $articles = array();
+
+    for ($i = 0; $i < $n; $i++)
+     {
+        $row = mysqli_fetch_assoc($result);
+        $articles[] = $row;
     }
 
+    return $articles;
 
 }
 function articles_get($link, $id_article){
+    $query = sprintf("SELECT * FROM articles WHERE id
+    =%d", (int)$id_article);
+    $result = mysqli_query($link, $query);
 
-    $stmt = $link->prepare("SELECT * FROM articles WHERE id = $id_article");
+    if (!$result)
+        die(mysqli_error($link));
+    $article = mysqli_fetch_assoc($result);
 
-    if ($stmt->execute(array())){
+    return $article;
 
-        return $stmt->fetch();
-
-    }
 
 }
 function articles_new($link, $title, $date, $image, $content){
     $title = trim($title);
     $content = trim($content);
+  
+    if ($title == '')
+        return false;
 
-    $stmt = $link->prepare("INSERT INTO articles (title, date, image, content)              VALUES (:title, :date,  :image, :content)");
+    $t = "INSERT INTO articles (title, date, image, content) VALUES ('%s', '%s',  '%s', '%s')";
 
-    $stmt->bindParam(':title', $title);
-    $stmt->bindParam(':date', $date);
-    $stmt->bindParam(':image', $image);
-    $stmt->bindParam(':content', $content);
+    $query = sprintf($t, mysqli_real_escape_string($link, $title),
+                     mysqli_real_escape_string($link, $date),
+                     mysqli_real_escape_string($link, $image),
+                     mysqli_real_escape_string($link, $content));
 
-      $title = $_POST['title'];
-    $date = $_POST['date'];
-    $image = $_POST['image'];
-    $content = $_POST['content'];
+    $result = mysqli_query($link, $query);
 
-    $stmt->execute();
-  header ('Location: index.php');
- 
+    if(!$result)
+        die(mysqli_error($link));
+
+    return true;
+
 
 }
 function articles_edit($link, $id, $title, $date, $image, $content){
@@ -46,28 +62,41 @@ function articles_edit($link, $id, $title, $date, $image, $content){
     $content = trim($content);
     $date = trim($date);
     $id = (int)$id;
+  
+    if($title == '')
+        return false;
 
-        $stmt = $link->prepare("UPDATE articles SET title=:title, date=:date, image=:image, content=:content  WHERE id=$id");
+    $sql = "UPDATE articles SET title = '%s', content = '%s', date='%s', image='%s' WHERE id='%d'";
 
-      $stmt->bindParam(':title', $title);
-    $stmt->bindParam(':date', $date);
-    $stmt->bindParam(':image', $image);
-    $stmt->bindParam(':content', $content);
+    $query = sprintf($sql,
+        mysqli_real_escape_string($link, $title),
+        mysqli_real_escape_string($link, $content),
+        mysqli_real_escape_string($link, $date),
+        mysqli_real_escape_string($link, $image),
+                     $id);
+    $result = mysqli_query($link, $query);
 
-      $title = $_POST['title'];
-    $date = $_POST['date'];
-    $image = $_POST['image'];
-    $content = $_POST['content'];
+    if(!$result)
+        die(mysqli_error($link));
 
-    $stmt->execute();
-    header ('Location: index.php');
+    return mysqli_affected_rows($link);
+
 
 }
 function articles_delete($link, $id){
+    $id = (int)$id;
+ 
+    if($id == 0)
+        return false;
 
-     $stmt = $link->prepare("DELETE FROM articles WHERE id = $id");
+    $query = sprintf("DELETE FROM articles WHERE id='%d'", $id);
+    $result = mysqli_query($link, $query);
 
-    $stmt->execute();
+    if(!$result)
+        die(mysqli_error($link));
+
+    return mysqli_affected_rows($link);
+
 
 
 
